@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="./libs/vendors/bootstrap.min">
+    <link rel="stylesheet" type="text/css" href="./libs/css/style">
+    <title>Company Directory</title>
+  </head>
+    
+  <body>
+    <div id="first-load"></div>
+    
+    <header>
+        <button id="new-btn">+ Add New</button>
+        <div id="search-container">
+            <svg xmlns="http://www.w3.org/2000/svg" id="search-icon" width="23" height="23" viewBox="0 0 24 24" stroke-width="2" stroke="#505050" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <circle cx="10" cy="10" r="7" />
+                <line x1="21" y1="21" x2="15" y2="15" />
+            </svg>
+            <input type="text" id="search" autocomplete="off" placeholder="Search by name, department or location" onfocus="this.placeholder = ''"
+                   onblur="this.placeholder = 'Search by name, department or location'">
+        </div>
+    </header>
+      
+      
+    <div id="main">
+        <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu">
+            <label for="openSidebarMenu" class="sidebarIconToggle">
+                <div class="spinner diagonal part-1"></div>
+                <div class="spinner horizontal"></div>
+                <div class="spinner diagonal part-2"></div>
+            </label>
+        <div id="side-bar">
+            <div id="side-contents">
+                <h1>Refine Search</h1>
+                <h2>Department</h2>
+                <div id="department-filter"></div>
+                <h2>Location</h2>
+                <div id="location-filter"></div>
+            </div>
+        </div>
+        <div id="results">
+            <div id="info">
+                <button id="reset-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="reset-icon" width="30" height="30" viewBox="0 0 24 24" stroke-width="1" stroke="#023047" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
+                        <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
+                    </svg>
+                </button>
+                <p id="records-found"></p>
+            </div>
+        </div>
+        <div id="results-load"></div>
+        <div id="profile">
+            <div id="cover">
+            </div>
+            <div id="profile-header">
+                <button id="mobile-close-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="back-icon" width="35" height="35" viewBox="0 0 24 24" stroke-width="2" stroke="#fafafa" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <polyline points="15 6 9 12 15 18" />
+                    </svg> Directory
+                </button>
+            </div>
+            <button id="close-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" id="close-icon" width="44" height="44" viewBox="0 0 24 24" stroke-width="1" stroke="#505050" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <rect x="4" y="4" width="16" height="16" rx="2" />
+                  <path d="M10 10l4 4m0 -4l-4 4" />
+                </svg>
+            </button>
+            <div id="initials"></div>
+            <h1 id="name"></h1>
+            <h2 id="email-heading">Email</h2>
+            <p id="email"></p>
+            <input type="text" id="email-input">
+            <h2>Department</h2>
+            <p id="department"></p>
+            <select id="dep-input" name="department">
+            </select>
+            <h2>Location</h2>
+            <p id="location"></p>
+            <div id="ctrl-btns">
+                <button id="edit-btn" class="ctrl-btn">Edit</button>
+                <button id="delete-btn" class="ctrl-btn">Delete</button>
+            </div>
+            <div id="edit-ctrl-btns">
+                <button id="cancel-btn" class="edit-ctrl-btn">Cancel</button>
+                <button id="save-btn" class="edit-ctrl-btn">Save</button>
+            </div>
+        </div>
+        <div id="new-form">
+            <div id="new-form-header">
+                <button id="mobile-close-new-form-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="new-form-back-icon" width="35" height="35" viewBox="0 0 24 24" stroke-width="2" stroke="#fafafa" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <polyline points="15 6 9 12 15 18" />
+                    </svg> Directory
+                </button>
+                <p id="create-record">Add New</p>
+            </div>
+            <form>
+                <h2>First Name</h2>
+                <input type="text" id="new-first-name" class="new-input" name="first-name">
+                <h2>Last Name</h2>
+                <input type="text" id="new-last-name" class="new-input" name="last-name">
+                <h2>Email</h2>
+                <input type="text" id="new-email" class="new-input" name="email">
+                <h2>Department</h2>
+                <select id="new-department" class="new-input" name="department"></select>
+                <h2>Location</h2>
+                <p id="new-location" name="last-name"></p>
+            </form>
+            <div id="new-ctrl-btns">
+                <button id="new-cancel-btn" class="new-ctrl-btn">Cancel</button>
+                <button id="new-save-btn" class="new-ctrl-btn">Save</button>
+            </div>
+        </div>
+    </div> 
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    
+    <script type="application/javascript" src="./libs/vendors/jquery-3.5.1"></script>
+    <script type="application/javascript" src="./libs/vendors/bootstrap.min"></script>
+    <script type="application/javascript" src="./libs/vendors/sweetalert2.all.min"></script>
+    <script type="application/javascript" src="./libs/js/script"></script>
+  </body>
+</html>
