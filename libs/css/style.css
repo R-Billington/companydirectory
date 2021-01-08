@@ -163,6 +163,13 @@ header, #results {
     padding: 60px 20px 10px 20px;
     overflow: auto;
 }
+#side-bar::-webkit-scrollbar {
+  display: none;
+}
+#side-bar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
 #side-bar h1 {
     font-size: 1.5rem;
     color: #023047;
@@ -183,7 +190,7 @@ header, #results {
     justify-items: start;
     align-items: end;
     white-space: nowrap;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 #department-filter input, #location-filter input {
     margin-right: 4px;
@@ -397,7 +404,7 @@ input[type=checkbox]:checked ~ .sidebarIconToggle > .diagonal.part-2 {
     
 }
 
-#profile, #new-form {
+#profile, #new-form, #edit-deploc {
     position: absolute;
     width: 60vmin;
     top: 50%;
@@ -413,7 +420,7 @@ input[type=checkbox]:checked ~ .sidebarIconToggle > .diagonal.part-2 {
     display: none;
 }
 
-#new-form h2 {
+#new-form h2, #edit-deploc h2 {
     color: #023047;
     font-size: 0.8rem;
     font-weight: 600;
@@ -460,7 +467,7 @@ input[type=checkbox]:checked ~ .sidebarIconToggle > .diagonal.part-2 {
     margin-right: 10px;
 }
 
-#profile-header, #new-form-header {
+#profile-header, #new-form-header, #edit-deploc-header {
     width: 100vw;
     height: 50px;
     background: rgb(58,100,121);
@@ -504,7 +511,7 @@ input[type=checkbox]:checked ~ .sidebarIconToggle > .diagonal.part-2 {
     left: 0;
 }
 
-.ctrl-btn, .new-ctrl-btn, .edit-ctrl-btn {
+.ctrl-btn, .new-ctrl-btn, .edit-ctrl-btn, .deploc-btn {
     border: none;
     cursor: pointer;
     outline: none;
@@ -516,7 +523,7 @@ input[type=checkbox]:checked ~ .sidebarIconToggle > .diagonal.part-2 {
     width: 90%;
     justify-self: center;
 }
-.ctrl-btn {
+.ctrl-btn, .deploc-btn {
     color: white;
     border-radius: 5px;
 }
@@ -525,6 +532,90 @@ input[type=checkbox]:checked ~ .sidebarIconToggle > .diagonal.part-2 {
 }
 #delete-btn {
     background-color: #d33;
+}
+
+#new-deploc-btn, #new-deploc-save-btn {
+    background-color: #54ab64;
+}
+#deploc-cancel-btn, #new-deploc-cancel-btn {
+    background-color: #d33;
+}
+#edit-deploc h1, #new-form h1 {
+    font-size: 1.5rem;
+    color: #023047;
+    font-weight: 200;
+    border-bottom: 1px solid rgba(150,150,150,1);
+    margin-bottom: 20px;
+}
+#edit-deploc-content {
+    height: 60%;
+    overflow: auto;
+    justify-items: start;
+    align-items: end;
+    margin: 0;
+    padding: 0;
+}
+#deploc-input, #loc-select {
+    display: none;
+}
+.deploc-item {
+    margin-bottom: 10px;
+}
+#edit-deploc-content p {
+    display: inline;
+    font-size: 1rem;
+}
+#deploc-btns {
+    display: grid;
+    position: absolute;
+    bottom: 75px;
+    width: 44vmin;
+    height: 40px;
+    grid-template-columns: 1fr 1fr;
+    transition: display 0.5s ease;
+}
+#new-deploc-btns {
+    display: grid;
+    position: absolute;
+    bottom: 75px;
+    width: 44vmin;
+    height: 40px;
+    grid-template-columns: 1fr 1fr;
+    display: none;
+    transition: display 0.5s ease;
+}
+#remove-icon {
+    margin: 0;
+    margin-right: 8px;
+    padding: 0;
+    display: inline;
+    position: relative;
+    bottom: 2px;
+    cursor: pointer;
+    transition: all 0.5s ease; 
+}
+#remove-icon:hover {
+    stroke: #d33;
+    fill: #fff;
+    width: '30';
+    height: '30';
+}
+.edit-deploc-btn {
+    border: none;
+    cursor: pointer;
+    outline: none;
+    height: 35px;
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, .5);
+    margin-left: 0px;
+    margin-bottom: 20px;
+    transition: box-shadow 1s ease;
+    width: 50%;
+    color: white;
+    border-radius: 5px;
+    background-color: #219ebc;
+}
+.edit-deploc-btn:hover, .deploc-btn:hover {
+    box-shadow: inset 3px 3px 5px 0 rgba(0, 0, 0, .5);
 }
 
 .ctrl-btn:hover, .new-ctrl-btn:hover {
@@ -540,7 +631,7 @@ input[type=checkbox]:checked ~ .sidebarIconToggle > .diagonal.part-2 {
     width: 35px;
 }
 
-#ctrl-btns, #edit-ctrl-btns, #new-ctrl-btns {
+#ctrl-btns, #edit-ctrl-btns {
     display: grid;
     position: absolute;
     bottom: 75px;
@@ -548,7 +639,14 @@ input[type=checkbox]:checked ~ .sidebarIconToggle > .diagonal.part-2 {
     height: 45px;
     grid-template-columns: 1fr 1fr;
 }
-
+#new-ctrl-btns {
+    display: grid;
+    position: absolute;
+    bottom: 55px;
+    width: 44vmin;
+    height: 45px;
+    grid-template-columns: 1fr 1fr;
+}
 #edit-ctrl-btns {
     opacity: 0;
     transition: opacity 0.5s ease;
@@ -616,7 +714,7 @@ input[type=checkbox]:checked ~ .sidebarIconToggle > .diagonal.part-2 {
     line-height: 35px;
     transition: color ease 0.2s;
 }
-#mobile-close-new-form-btn {
+#mobile-close-new-form-btn, #mobile-close-edit-deploc-btn {
     display: inline-block;
     margin: 0;
     border: none;
@@ -633,7 +731,7 @@ input[type=checkbox]:checked ~ .sidebarIconToggle > .diagonal.part-2 {
     right: 10px;
     bottom: 1px;
 }
-#back-icon, #new-form-back-icon {
+#back-icon, #new-form-back-icon, #edit-deploc-back-icon {
     margin: 0;
     padding: 0;
     position: relative;
@@ -641,7 +739,7 @@ input[type=checkbox]:checked ~ .sidebarIconToggle > .diagonal.part-2 {
     left: 6px;
     transition: stroke ease 0.2s;
 }
-p#create-record {
+p#create-record, p#edit-deploc-title {
     display: inline-block;
     color: #fafafa;
     font-weight: 400;
@@ -694,6 +792,26 @@ p#create-record {
     visibility: hidden;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
 /***********************
 // SWEET ALERT
 ************************/
@@ -721,7 +839,7 @@ p#create-record {
         font-size: 1.5rem;
     }
     
-    #profile, #new-form {
+    #profile, #new-form, #edit-deploc {
         width: 65vmin;
         height: 100vmin;
         margin-top: -50vmin;
@@ -786,7 +904,7 @@ p#create-record {
         transform: translateX(100vw);
         transition: transform ease 0.3s;
     }
-    #new-form {
+    #new-form, #edit-deploc {
         position: absolute;
         width: 100vw;
         height: 100vh;
@@ -805,6 +923,9 @@ p#create-record {
         padding: 0;
         width: calc(100vw - 80px);
     }
+    #edit-deploc h1, #new-form h1 {
+        display: none;
+    }
     #close-btn {
         display: none;
     }
@@ -815,7 +936,11 @@ p#create-record {
         display: grid;
         grid-template-columns: 2fr 3fr;
     }
-    #mobile-close-btn, #mobile-close-new-form-btn {
+    #edit-deploc-header {
+        display: grid;
+        grid-template-columns: 2fr 3fr;
+    }
+    #mobile-close-btn, #mobile-close-new-form-btn, #mobile-close-edit-deploc-btn {
         display: block;
     }
     #new-btn {
@@ -840,6 +965,10 @@ p#create-record {
         width: calc(100vw - 80px);
         bottom: 200px;
     }
+    #deploc-btns, #new-deploc-btns {
+        width: calc(100vw - 80px);
+        bottom: 150px;
+    }
     #email-input, #dep-input, .new-input {
         width: calc(100vw - 80px);
     }
@@ -849,10 +978,16 @@ p#create-record {
     #cover {
         display: none;
     }
+    #edit-deploc-content {
+        margin-top: 35px;
+    }
+    #deploc-input {
+        margin-top: 35px;
+    }
 }
 
 @media screen and (max-width: 370px) {
-    #ctrl-btns, #edit-ctrl-btns, #new-ctrl-btns {
+    #ctrl-btns, #edit-ctrl-btns, #new-ctrl-btns, #deploc-btns, #new-deploc-btns {
         bottom: 100px;
     }
 }
