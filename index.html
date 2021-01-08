@@ -37,8 +37,11 @@
                 <h1>Refine Search</h1>
                 <h2>Department</h2>
                 <div id="department-filter"></div>
+                <button id="edit-department-btn" class="edit-deploc-btn">Edit Departments</button>
                 <h2>Location</h2>
                 <div id="location-filter"></div>
+                <button id="edit-location-btn" class="edit-deploc-btn">Edit Locations</button>
+                <h1> </h1>
             </div>
         </div>
         <div id="results">
@@ -102,6 +105,7 @@
                 </button>
                 <p id="create-record">Add New</p>
             </div>
+            <h1>Add New</h1>
             <form>
                 <h2>First Name</h2>
                 <input type="text" id="new-first-name" class="new-input" name="first-name">
@@ -117,6 +121,35 @@
             <div id="new-ctrl-btns">
                 <button id="new-cancel-btn" class="new-ctrl-btn">Cancel</button>
                 <button id="new-save-btn" class="new-ctrl-btn">Save</button>
+            </div>
+        </div>
+        <div id="edit-deploc">
+            <div id="edit-deploc-header">
+                <button id="mobile-close-edit-deploc-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="edit-deploc-back-icon" width="35" height="35" viewBox="0 0 24 24" stroke-width="2" stroke="#fafafa" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <polyline points="15 6 9 12 15 18" />
+                    </svg> Directory
+                </button>
+                <p id="edit-deploc-title">Edit Departments</p>
+            </div>
+            <h1>Edit Departments</h1>
+            <div id="edit-deploc-content"></div>
+            <div id="deploc-input">
+                <h2 id=deploc-label>Department Name</h2>
+                <input type="text" id="new-deploc-name" class="new-input">
+            </div>
+            <div id="loc-select">
+                <h2>Location</h2>
+                <select id="deploc-location" class="new-input"></select>
+            </div>
+            <div id="deploc-btns">
+                <button id="new-deploc-btn" class="deploc-btn">Add New</button>
+                <button id="deploc-cancel-btn" class="deploc-btn">Cancel</button>
+            </div>
+            <div id="new-deploc-btns">
+                <button id="new-deploc-save-btn" class="deploc-btn">Save</button>
+                <button id="new-deploc-cancel-btn" class="deploc-btn">Cancel</button>
             </div>
         </div>
     </div> 
