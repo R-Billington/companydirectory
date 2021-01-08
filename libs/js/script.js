@@ -130,6 +130,7 @@ function init() {
         type: 'POST',
         success: function(result) {
             let departments = result.data;
+            $('#department-filter').html('');
             departments.forEach(function(department) {
                 let container = $('<div></div>')
                 let checkbox = $('<input type="checkbox" class="dep-filter">');
@@ -150,6 +151,7 @@ function init() {
         type: 'POST',
         success: function(result) {
             let locations = result.data;
+            $('#location-filter').html('');
             locations.forEach(function(location) {
                 let container = $('<div></div>')
                 let checkbox = $('<input type="checkbox" class="loc-filter">');
@@ -170,7 +172,7 @@ $(window).on('load', function () {
     
     init();
     
-    setTimeout(function() {
+    /*setTimeout(function() {
         $('.record').remove();
         $('#location-filter').html('');
         $('#department-filter').html('');
@@ -184,7 +186,7 @@ $(window).on('load', function () {
             $('#department-filter').html('');
             init();
         }
-    }, 1000);
+    }, 1000);*/
     
 });
 
@@ -402,8 +404,9 @@ $('#cancel-btn').click(function() {
 $('#save-btn').click(function() {
     if (!$('#email-input').val()) {
         Swal.fire({
+            icon: 'error',
             title: 'Please enter a valid email',
-            confirmButtonColor: '#54ab64'
+            confirmButtonColor: '#219ebc'
         });
     } else {
         let emailEdit = $('#email-input').val();
@@ -731,8 +734,9 @@ $('#new-department').change(function() {
 $('#new-save-btn').click(function() {
     if (!$('#new-first-name').val() || !$('#new-last-name').val() || !$('#new-email').val() || !$('#new-department').val()) {
         Swal.fire({
+            icon: 'error',
             title: 'Please fill out each field before saving.',
-            confirmButtonColor: '#54ab64'
+            confirmButtonColor: '#219ebc'
         });
     } else {
         
@@ -821,18 +825,424 @@ function resetNewFormMobile() {
 })*/
 
 
+
+
+///////////////////////////////////////////////
+// EDIT LOATION AND DEPARTMENT BUTTONS
+let removeSymbol = '<svg xmlns="http://www.w3.org/2000/svg" id="remove-icon" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="#fff" fill="#d33" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><line x1="9" y1="12" x2="15" y2="12" /></svg>';    
+    
+$('#edit-department-btn').click(function() {
+    $('#openSidebarMenu')[0].checked = false;
+    $('#side-contents').fadeOut('fast');
+    $.ajax({
+        url: 'libs/php/getAllDepartments.php',
+        type: 'POST',
+        success: function(result) {
+            let departments = result.data;
+            $('#edit-deploc').removeClass().addClass('department');
+            $('#edit-deploc-title').html('Edit Departments');
+            $('#edit-deploc h1').html('Edit Departments');
+            $('#edit-deploc-content').html('');
+            departments.forEach(function(department) {
+                let container = $('<div class="deploc-item"></div>')
+                let remove = $(removeSymbol);
+                let label = $('<p></p>');
+                remove.attr({
+                    'class': department.id
+                });
+                label.text(department.name);
+                container.append(remove).append(label);
+                $('#edit-deploc-content').append(container);  
+            });
+            if (x.matches) {
+                showDeplocMobile();
+            } else {
+                showDeploc();
+            }
+        }
+    });
+    
+})
+
+$('#edit-location-btn').click(function() {
+    $('#openSidebarMenu')[0].checked = false;
+    $('#side-contents').fadeOut('fast');
+    $.ajax({
+        url: 'libs/php/getAllLocations.php',
+        type: 'POST',
+        success: function(result) {
+            let locations = result.data;
+            $('#edit-deploc').removeClass().addClass('location');
+            $('#edit-deploc-title').html('Edit Locations');
+            $('#edit-deploc h1').html('Edit Locations');
+            $('#edit-deploc-content').html('');
+            locations.forEach(function(location) {
+                let container = $('<div class="deploc-item"></div>')
+                let remove = $(removeSymbol);
+                let label = $('<p></p>');
+                remove.attr({
+                    'class': location.id
+                });
+                label.text(location.name);
+                container.append(remove).append(label);
+                $('#edit-deploc-content').append(container);  
+            });
+            if (x.matches) {
+                showDeplocMobile();
+            } else {
+                showDeploc();
+            }
+        }
+    });
+    
+})
+
+document.addEventListener('click', function (event) {
+	if (!event.target.closest('#mobile-close-edit-deploc-btn')) return;
+	closeDeplocMobile();
+}, false);
+    
+$('#deploc-cancel-btn').click(function() {
+    if (x.matches) {
+        closeDeplocMobile();
+    } else {
+        $('#edit-deploc').fadeOut();
+    }
+    resetDeploc();
+})
+    
+document.addEventListener('click', function (event) {
+	if (!event.target.closest('#remove-icon')) return;
+    let name;
+    if ($(event.target).prop('nodeName') === 'svg') {
+        name = $(event.target).next().html();
+    } else {
+        name = $(event.target).parent().next().html();
+    }
+    let id = $(event.target).parent().attr('class');
+	Swal.fire({
+            title: `Delete ${name} from the database?`,
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#54ab64',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if ($('#edit-deploc').hasClass('location')) {
+                    $.ajax({
+                        url: 'libs/php/getDepartmentByLocationID.php',
+                        type: 'POST',
+                        data: {
+                            id: id 
+                        },
+                        success: function(result) {
+                            if (result.data[0].department != null) {
+                                console.log(result.data);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Location with existing departments cannot be deleted.',
+                                    confirmButtonColor: '#219ebc'
+                                });
+                            } else {
+                                $.ajax({
+                                    url: 'libs/php/deleteLocationByID.php',
+                                        type: 'POST',
+                                        data: {
+                                            id: id 
+                                        },
+                                        success: function(result) {
+                                            Swal.fire(
+                                                'Deleted!',
+                                                'This location has been deleted.',
+                                                'success'
+                                            )
+                                            resetDeploc();
+                                            if (x.matches) {
+                                                closeDeplocMobile();
+                                            } else {
+                                                $('#edit-deploc').fadeOut();
+                                            }
+                                            repopulateFilter();
+                                        }
+                                });
+                            }
+                        }
+                    });
+                } else if ($('#edit-deploc').hasClass('department')) {
+                    $.ajax({
+                        url: 'libs/php/getPeopleByLocationOrDepartment.php',
+                        type: 'POST',
+                        data: {
+                            query: `WHERE d.id = ${id}`
+                        },
+                        success: function(result) {
+                            if (result.data.length != 0) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Department with existing personnel cannot be deleted.',
+                                    confirmButtonColor: '#219ebc'
+                                });
+                            } else {
+                                $.ajax({
+                                    url: 'libs/php/deleteDepartmentByID.php',
+                                        type: 'POST',
+                                        data: {
+                                            id: id 
+                                        },
+                                        success: function(result) {
+                                            Swal.fire(
+                                                'Deleted!',
+                                                'This department has been deleted.',
+                                                'success'
+                                            )
+                                            resetDeploc();
+                                            if (x.matches) {
+                                                closeDeplocMobile();
+                                            } else {
+                                                $('#edit-deploc').fadeOut();
+                                            }
+                                            repopulateFilter();
+                                        }
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+    });
+                
+}, false);
+
+function closeDeplocMobile() {
+    $('#edit-deploc').fadeOut();
+    $('#edit-deploc').css('transform', 'translateX(100vw)');
+    $('header').css('transform', 'translateX(0)');
+    $('#results').css('transform', 'translateX(0)');
+    $('.spinner').css('transform', 'translateX(0)');
+    $('#side-bar').delay(400).fadeIn(350);
+    resetDeploc();
+}
+
+function showDeploc() {
+    $('#edit-deploc').fadeIn();
+}
+
+function showDeplocMobile() {
+    $('header').css('transform', 'translateX(-100vw)');
+    $('#results').css('transform', 'translateX(-100vw)');
+    $('.spinner').css('transform', 'translateX(-100vw)');
+    $('#side-bar').hide();
+    $('#edit-deploc').fadeIn('fast');
+    $('#edit-deploc').css('transform', 'translateX(0)');
+}
+
+$('#new-deploc-btn').click(function() {
+    if ($('#edit-deploc').hasClass('location')) {
+        
+        $('#edit-deploc-title').html('New Location');
+        $('#edit-deploc h1').html('New Location');
+        $('#deploc-label').html('Location Name');
+        $('#edit-deploc-content').hide();
+        $('#deploc-input').fadeIn();
+        $('#deploc-btns').css('display', 'none');
+        $('#new-deploc-btns').css('display', 'grid');
+        $('#new-deploc-name').focus();
+        
+    } else if ($('#edit-deploc').hasClass('department')) {
+        
+        $('#edit-deploc-title').html('New Department');
+        $('#edit-deploc h1').html('New Department');
+        $('#deploc-label').html('Department Name');
+        $('#edit-deploc-content').hide();
+        $('#deploc-input').fadeIn();
+        $('#loc-select').fadeIn();
+        $('#deploc-btns').css('display', 'none');
+        $('#new-deploc-btns').css('display', 'grid');
+        $('#new-deploc-name').focus();
+        
+        $.ajax({
+        url: 'libs/php/getAllLocations.php',
+        type: 'POST',
+        success: function(result) {
+            $('#deploc-location').html('<option disabled selected value>-- select a location --</option>');
+            let locations = result.data;
+            locations.forEach(function(location) {
+                let option = $('<option></option>');
+                option.attr({
+                    value: location.id,
+                });
+                option.text(location.name);
+                $('#deploc-location').append(option);
+            });
+        }
+    });
+    }
+})
+    
+$('#new-deploc-cancel-btn').click(function() {
+    $('#deploc-btns').css('display', 'grid');
+    $('#new-deploc-btns').css('display', 'none');
+    $('#deploc-input').hide();
+    $('#loc-select').hide();
+    $('#edit-deploc-content').fadeIn();
+    
+    if ($('#edit-deploc').hasClass('location')) {
+        $('#edit-deploc-title').html('Edit Locations');
+        $('#edit-deploc h1').html('Edit Locations');
+    } else if ($('#edit-deploc').hasClass('department')) {
+        $('#edit-deploc-title').html('Edit Departments');
+        $('#edit-deploc h1').html('Edit Departments');
+    }
+})
+    
+function resetDeploc() {
+    $('#deploc-btns').css('display', 'grid');
+    $('#new-deploc-btns').css('display', 'none');
+    $('#deploc-input').hide();
+    $('#new-deploc-name').val('');
+    $('#loc-select').hide();
+    $('#edit-deploc-content').show();
+}
+
+$('#new-deploc-save-btn').click(function() {
+    if ($('#edit-deploc').hasClass('department')) {
+        if (!$('#new-deploc-name').val() || !$('#deploc-location').val()) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Please fill out each field before saving.',
+                confirmButtonColor: '#219ebc'
+            });
+        } else {
+
+            Swal.fire({
+                title: 'Are you sure you want to add this to the database?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#54ab64',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'libs/php/insertDepartment.php',
+                        type: 'POST',
+                        data: {
+                            name: $('#new-deploc-name').val(),
+                            locationID: $('#deploc-location').val()
+                        },
+                        success: function(result) {
+                            Swal.fire(
+                                'Saved!',
+                                'Successfully added to the database.',
+                                'success'
+                            );
+                            if (x.matches) {
+                                closeDeplocMobile();
+                            } else {
+                                $('#edit-deploc').fadeOut();
+                            }
+                            resetDeploc();
+                            repopulateFilter();
+                        }
+                    });
+                }
+            });
+        }
+    } else if ($('#edit-deploc').hasClass('location')) {
+        if (!$('#new-deploc-name').val()) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Please fill out each field before saving.',
+                confirmButtonColor: '#219ebc'
+            });
+        } else {
+
+            Swal.fire({
+                title: 'Are you sure you want to add this to the database?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#54ab64',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let locID = ($('#edit-deploc-content').children().length + 1).toString();
+                    $.ajax({
+                        url: 'libs/php/insertLocation.php',
+                        type: 'POST',
+                        data: {
+                            name: $('#new-deploc-name').val(),
+                            id: locID
+                        },
+                        success: function(result) {
+                            Swal.fire(
+                                'Saved!',
+                                'Successfully added to the database.',
+                                'success'
+                            );
+                            if (x.matches) {
+                                closeDeplocMobile();
+                            } else {
+                                $('#edit-deploc').fadeOut();
+                            }
+                            resetDeploc();
+                            repopulateFilter();
+                        }
+                    });
+                }
+            });
+        }
+    }
+    
+})
+    
+function repopulateFilter() {
+    $.ajax({
+        url: 'libs/php/getAllDepartments.php',
+        type: 'POST',
+        success: function(result) {
+            let departments = result.data;
+            $('#department-filter').html('');
+            departments.forEach(function(department) {
+                let container = $('<div></div>')
+                let checkbox = $('<input type="checkbox" class="dep-filter">');
+                let label = $('<label></label>');
+                checkbox.attr({
+                    'id': department.id,
+                    'name': department.name
+                });
+                label.attr('for', department.name).text(department.name);
+                container.append(checkbox).append(label);
+                $('#department-filter').append(container);  
+            });
+        }
+    });
+    
+    $.ajax({
+        url: 'libs/php/getAllLocations.php',
+        type: 'POST',
+        success: function(result) {
+            let locations = result.data;
+            $('#location-filter').html('');
+            locations.forEach(function(location) {
+                let container = $('<div></div>')
+                let checkbox = $('<input type="checkbox" class="loc-filter">');
+                let label = $('<label></label>');
+                checkbox.attr({
+                    'id': location.id,
+                    'name': locations.name
+                });
+                label.attr('for', location.name).text(location.name);
+                container.append(checkbox).append(label);
+                $('#location-filter').append(container);  
+            });
+        }
+    });
+}
+
+
+
+
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
